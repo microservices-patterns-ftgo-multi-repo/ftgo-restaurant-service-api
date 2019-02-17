@@ -1,0 +1,8 @@
+
+dependencies {
+
+
+    compile "io.eventuate.tram.core:eventuate-tram-events:$eventuateTramVersion"
+    compile "net.chrisrichardson.ftgo:ftgo-common:" + this["ftgo-common-version"]
+
+}
