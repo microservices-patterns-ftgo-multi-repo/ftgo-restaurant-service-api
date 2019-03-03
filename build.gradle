@@ -2,9 +2,11 @@ buildscript {
     repositories {
         mavenCentral()
  jcenter()
+ jcenter()
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath "io.spring.gradle:dependency-management-plugin:$springDependencyManagementPluginVersion"
     }
@@ -43,6 +45,48 @@ subprojects {
         }
 
     }
+
+}
+apply plugin: FixVersionProperties
+subprojects {
+
+  apply plugin: 'maven'
+  apply plugin: 'com.jfrog.bintray'
+
+  bintray {
+      user = System.getenv('BINTRAY_USER')
+      key = System.getenv('BINTRAY_KEY')
+      configurations = ['archives']
+
+
+      publish = true
+      override = true
+
+      pkg {
+          repo = 'microservices-patterns-ftgo-multi-repo'
+          name = 'ftgo-multi-repo'
+          licenses = ['Apache-2.0']
+          vcsUrl = 'https://github.com/ftgo-multi-repo'
+      }
+  }
+
+
+  uploadArchives {
+      repositories {
+          mavenDeployer {
+              repository(url: deployUrl)
+              pom.project {
+                  licenses {
+                      license {
+                          name 'The Apache Software License, Version 2.0'
+                          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                          distribution 'repo'
+                      }
+                  }
+              }
+          }
+      }
+  }
 
 }
 apply plugin: FixVersionProperties
